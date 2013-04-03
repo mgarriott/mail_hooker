@@ -55,12 +55,11 @@ sub has_new_mail {
   if ($self->outdated) {
     $self->fetch;
   }
-  # $self->fetch if ($self->outdated);
 
   my $result = 0;
 
   foreach(values($self->{'mail'})) {
-    if ($$_{"FLAGS"} eq '') {
+    if ($self->is_new($_)) {
       $result = 1;
       last;
     }
@@ -75,4 +74,29 @@ sub get_message_ids {
 
   $keys = ['6999', '7001', '7002'];
   return $keys;
+}
+
+# Return all new messages
+sub get_new_mail {
+  my $self = shift;
+  my %result = ();
+
+  foreach(($k, $v) = each($self->{'mail'})) {
+    if ($self->is_new($v)) {
+      $result{$k} = $v;
+    }
+  }
+
+  return \%result;
+}
+
+# Check if given message is new
+sub is_new {
+  my $self = shift;
+  my $msg = $_[0];
+  if ($msg->{"FLAGS"} eq '') {
+    return 1;
+  } else {
+    return 0;
+  }
 }

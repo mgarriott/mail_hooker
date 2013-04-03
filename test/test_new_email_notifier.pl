@@ -3,7 +3,7 @@ use FindBin;                 # locate this script
 use lib "$FindBin::Bin/..";  # use the parent directory
 use Account;
 
-use Test::More tests => 12;
+use Test::More tests => 16;
 
 my $acct = new Account();
 
@@ -50,12 +50,22 @@ outdate_account(sub { ok($acct->outdated, 'Account is outdated'); });
 
 ok(!$acct->has_new_mail, 'Account does NOT have new mail');
 
+is_deeply($acct->get_new_mail, {},
+  'Empty hash returned for get_new_mail if there is no new mail');
+
 $fake_mail{'7002'} = {
                     'INTERNALDATE' => '27-Feb-2013 02:25:56 +0000',
                     'FLAGS' => ''
                   };
 
 ok($acct->has_new_mail, 'Account does have new mail');
+is_deeply($acct->get_new_mail, {
+                '7002' => {
+                      'INTERNALDATE' => '27-Feb-2013 02:25:56 +0000',
+                      'FLAGS' => ''
+                  },
+                },
+  'New messages are returned by get_new_mail');
 
 outdate_account(sub { ok($acct->has_new_mail,
       'has_new_mail() fetches if outdated'); });
@@ -65,3 +75,6 @@ is(@$ids, 3, 'get_message_ids returns list of 3 items');
 ok('6999' ~~ $ids, 'get_message_ids contains 6999');
 ok('7001' ~~ $ids, 'get_message_ids contains 7001');
 ok('7002' ~~ $ids, 'get_message_ids contains 7002');
+
+ok($acct->is_new($acct->{'mail'}{'7002'}), 'is_new returns true for new mail');
+ok(!$acct->is_new($acct->{'mail'}{'7001'}), 'is_new returns false for old mail');
