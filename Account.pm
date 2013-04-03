@@ -72,8 +72,8 @@ sub has_new_mail {
 sub get_message_ids {
   $self = shift;
 
-  $keys = ['6999', '7001', '7002'];
-  return $keys;
+  @keys = keys($self->{'mail'});
+  return \@keys;
 }
 
 # Return all new messages
@@ -99,4 +99,26 @@ sub is_new {
   } else {
     return 0;
   }
+}
+
+sub has_unseen {
+  my $self = shift;
+
+  if (!$self->{'seen'}) {
+    # If $self->{'seen'} is undefined return true if there are any new
+    # messages
+    return $self->has_new_mail;
+  } else {
+    # Compare new messages hash to seen hash. If they are different return
+    # true
+    $new = $self->get_new_mail;
+    $seen = $self->{'seen'};
+    return !(values(%$new) ~~ values(%$seen));
+  }
+}
+
+sub register_seen {
+  my $self = shift;
+
+  $self->{'seen'} = $self->get_new_mail;
 }
