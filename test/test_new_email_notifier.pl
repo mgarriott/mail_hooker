@@ -3,7 +3,7 @@ use FindBin;                 # locate this script
 use lib "$FindBin::Bin/..";  # use the parent directory
 use Account;
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 
 my $acct = new Account();
 
@@ -110,3 +110,7 @@ ok('7003' ~~ $ids, 'get_message_ids contains 7003');
 
 ok($acct->is_new($acct->{'mail'}{'7002'}), 'is_new returns true for new mail');
 ok(!$acct->is_new($acct->{'mail'}{'7001'}), 'is_new returns false for old mail');
+
+ok(!$acct->has_unseen, 'Account has no unseen messages');
+delete($fake_mail{'7003'});
+ok(!$acct->has_unseen, 'Account has no unseen messages after deleting one');

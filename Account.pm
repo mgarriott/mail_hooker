@@ -116,9 +116,16 @@ sub has_unseen {
   } else {
     # Compare new messages hash to seen hash. If they are different return
     # true
-    $new = $self->get_new_mail;
-    $seen = $self->{'seen'};
-    return !(values(%$new) ~~ values(%$seen));
+
+    @new_keys = keys(%{$self->get_new_mail});
+    @seen_keys = keys(%{$self->{'seen'}});
+    foreach(@new_keys) {
+      unless ($_ ~~ @seen_keys) {
+        return 1;
+      }
+    }
+
+    return 0;
   }
 }
 
