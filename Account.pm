@@ -1,28 +1,33 @@
 package Account;
 1;
 
+use lib ('/home/matt/.perl5/lib/perl5');
 use Mail::IMAPClient;
 use Time::HiRes;
 
 sub new {
   $self = {};
 
-  my %hash = @_[1..$#_];
+  my @conn = @_[1..$#_];
+  $self->{'conn'} = \@conn;
 
-  $self->{'imap'} = Mail::IMAPClient->new(%hash);
   return bless $self;
 }
 
 sub fetch_mail_from_server {
   $self = shift;
-  $self->{'imap'}->select('Inbox')
-    or die "Select '$Opt{folder}' error: ", $self->{'imap'}->LastError, "\n";
 
-  $self->{'mail'} = $self->{'imap'}->fetch_hash("FLAGS", "INTERNALDATE")
-    or die "Fetch mail '$Opt{folder}' error: ", $self->{'imap'}->LastError, "\n";
+  $conn = $self->{'conn'};
+  my $imap = Mail::IMAPClient->new(@$conn) or die;
 
-  $self->{'imap'}->logout
-    or die "Logout error: ", $self->{'imap'}->LastError, "\n";
+  $imap->select('Inbox')
+    or die "Select '$Opt{folder}' error: ", $imap->LastError, "\n";
+
+  $self->{'mail'} = $imap->fetch_hash("FLAGS", "INTERNALDATE")
+    or die "Fetch mail '$Opt{folder}' error: ", $imap->LastError, "\n";
+
+  $imap->logout
+    or die "Logout error: ", $imap->LastError, "\n";
 }
 
 sub fetch {
@@ -81,7 +86,7 @@ sub get_new_mail {
   my $self = shift;
   my %result = ();
 
-  foreach(($k, $v) = each($self->{'mail'})) {
+  while(($k, $v) = each(%{$self->{'mail'}})) {
     if ($self->is_new($v)) {
       $result{$k} = $v;
     }

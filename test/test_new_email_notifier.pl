@@ -3,7 +3,7 @@ use FindBin;                 # locate this script
 use lib "$FindBin::Bin/..";  # use the parent directory
 use Account;
 
-use Test::More tests => 21;
+use Test::More tests => 24;
 
 my $acct = new Account();
 
@@ -78,11 +78,28 @@ $fake_mail{'7003'} = {
                     'FLAGS' => ''
                   };
 
+my $new_mail = $acct->get_new_mail;
+is(keys($new_mail), 2, 'There are two new messages returned by get_new_mail()');
+is_deeply($new_mail, {
+                '7002' => {
+                      'INTERNALDATE' => '27-Feb-2013 02:25:56 +0000',
+                      'FLAGS' => ''
+                  },
+                 '7003' => {
+                    'INTERNALDATE' => '27-Feb-2013 03:25:56 +0000',
+                    'FLAGS' => ''
+                  }
+                },
+  'New messages are returned by get_new_mail even when more than one');
+
 outdate_account(sub { ok($acct->has_new_mail,
       'has_new_mail() fetches if outdated'); });
 
 ok($acct->has_unseen,
   'Account has unseen messages after new message comes in');
+
+$acct->register_seen;
+ok(!$acct->has_unseen, 'Account has no unseen messages after registering');
 
 my $ids = $acct->get_message_ids;
 is(@$ids, 4, 'get_message_ids returns list of 4 items');
