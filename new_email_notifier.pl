@@ -1,12 +1,9 @@
 use FindBin;                # locate this script
 use lib "$FindBin::Bin/.";  # use the parent directory
 use Account;
-use YAML;
+use YAML ('LoadFile');
 
-my $input = '';
-while (<STDIN>) { $input .= $_ }
-
-my $config = Load($input);
+my $config = LoadFile("$FindBin::Bin/config.yml");
 
 my $acct = new Account(
   Server   => 'imap.gmail.com',
