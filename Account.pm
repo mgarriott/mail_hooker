@@ -1,7 +1,7 @@
 package Account;
 1;
 
-use lib ('/home/matt/.perl5/lib/perl5');
+use lib glob('~/.perl5/lib/perl5');
 use Mail::IMAPClient;
 use Time::HiRes;
 
