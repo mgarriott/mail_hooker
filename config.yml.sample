@@ -1,0 +1,7 @@
+---
+# After modifying this file rename it to config.yml
+
+user: user@gmail.com
+password: password
+refresh_time: 60
+sound_file: ~/my/great/sound.wav
