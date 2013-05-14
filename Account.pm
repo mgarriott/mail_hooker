@@ -21,10 +21,10 @@ sub fetch_mail_from_server {
   my $imap = Mail::IMAPClient->new(@$conn) or die;
 
   $imap->select('Inbox')
-    or die "Select '$Opt{folder}' error: ", $imap->LastError, "\n";
+    or die "Select 'Inbox' error: ", $imap->LastError, "\n";
 
   $self->{'mail'} = $imap->fetch_hash("FLAGS", "INTERNALDATE")
-    or die "Fetch mail '$Opt{folder}' error: ", $imap->LastError, "\n";
+    or die "Fetch mail error: ", $imap->LastError, "\n";
 
   $imap->logout
     or die "Logout error: ", $imap->LastError, "\n";

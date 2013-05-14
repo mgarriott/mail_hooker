@@ -1,11 +1,15 @@
 use FindBin;                # locate this script
 use lib "$FindBin::Bin/.";  # use the parent directory
 use Account;
-use YAML ('LoadFile');
+use YAML ('LoadFile', 'Load');
 
-my $config_file = $ARGV[1] ? $ARGV[1] : "$FindBin::Bin/config.yml";
 
-my $config = LoadFile($config_file);
+my $config;
+if ($ARGV[1]) {
+  $config = Load($ARGV[1] . "\n");
+} else {
+  $config = LoadFile("$FindBin::Bin/config.yml");
+}
 
 my $acct = new Account(
   Server   => 'imap.gmail.com',
@@ -20,7 +24,7 @@ $acct->register_seen;
 
 my $cmd;
 -e glob($$config{'sound_file'}) ||
-  die "Sound file does not seem to exist. Check $config_file";
+  die "Sound file does not seem to exist. Check provided config info.";
 if ($$config{'sound_file'} =~ /\.(wav|flac)$/) {
   $cmd = 'aplay';
 } elsif ($$config{'sound_file'} =~ /\.mp3$/) {
