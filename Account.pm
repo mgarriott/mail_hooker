@@ -119,11 +119,16 @@ sub has_unseen {
 
     @new_keys = keys(%{$self->get_new_mail});
     @seen_keys = keys(%{$self->{'seen'}});
+
+    # I understand that smartsearch is experimental, and I don't wish to be
+    # reminded...
+    no warnings;
     foreach(@new_keys) {
       unless ($_ ~~ @seen_keys) {
         return 1;
       }
     }
+    use warnings;
 
     return 0;
   }
