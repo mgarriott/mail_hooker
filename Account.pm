@@ -18,7 +18,7 @@ sub fetch_mail_from_server {
   $self = shift;
 
   $conn = $self->{'conn'};
-  my $imap = Mail::IMAPClient->new(@$conn) or die;
+  my $imap = Mail::IMAPClient->new(@$conn) or return 0;
 
   $imap->select('Inbox')
     or die "Select 'Inbox' error: ", $imap->LastError, "\n";
@@ -32,8 +32,9 @@ sub fetch_mail_from_server {
 
 sub fetch {
   $self = shift;
-  $self->fetch_mail_from_server;
+  my $result = $self->fetch_mail_from_server;
   $self->{'last_updated'} = time();
+  return $result;
 }
 
 # Return true if the current mail information is outdated, i.e. more than 60
