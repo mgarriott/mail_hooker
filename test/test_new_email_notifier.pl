@@ -1,6 +1,6 @@
 use strict;
-use FindBin;                 # locate this script
-use lib "$FindBin::Bin/..";  # use the parent directory
+use FindBin;                     # locate this script
+use lib "$FindBin::Bin/../src";  # use src directory
 use Account;
 
 use Test::More tests => 26;

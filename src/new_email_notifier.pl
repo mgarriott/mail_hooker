@@ -8,7 +8,7 @@ my $config;
 if ($ARGV[1]) {
   $config = Load($ARGV[1] . "\n");
 } else {
-  $config = LoadFile("$FindBin::Bin/config.yml");
+  $config = LoadFile("$FindBin::Bin/../config.yml");
 }
 
 my $acct = new Account(
