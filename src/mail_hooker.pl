@@ -6,8 +6,11 @@ use Account;
 use YAML ('LoadFile', 'Load');
 
 my $config;
-if ($ARGV[1]) {
-  $config = Load($ARGV[1] . "\n");
+
+# Check if there is input in STDIN
+if (! -t STDIN) {
+  my @lines = <STDIN>;
+  $config = Load(join('', @lines));
 } else {
   $config = LoadFile("$FindBin::Bin/../config.yml");
 }
