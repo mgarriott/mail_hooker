@@ -5,4 +5,4 @@ user: user@gmail.com
 password: password
 server_address: imap.gmail.com
 refresh_time: 60
-sound_file: ~/my/great/sound.wav
+command: aplay ~/my/sound.wav 2&> /dev/null
