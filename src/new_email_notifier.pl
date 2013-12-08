@@ -12,7 +12,7 @@ if ($ARGV[1]) {
 }
 
 my $acct = new Account(
-  Server   => 'imap.gmail.com',
+  Server   => $$config{'server_address'},
   User     => $$config{'user'},
   Password => $$config{'password'},
   Ssl      => 1,
