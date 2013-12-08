@@ -41,10 +41,19 @@ if ($ARGV[0]) {
 }
 
 while (&$keep_running()) {
-  $acct->fetch;
-  if ($acct->has_unseen) {
-    system($$config{'command'});
+  if ($acct->fetch) {
+    if ($acct->has_unseen) {
+      system($$config{'command'});
+    }
+    $acct->register_seen;
+  } else {
+    # Fetching mail from the account failed.
+    # This could be due to improper configuration (bad username or password),
+    # or their may be no internet connectivity.
+    #
+    # Report the error and go to sleep
+    print "Failed to fetch the mail. " .
+          "Check your configuration and / or your internet connection.\n";
   }
-  $acct->register_seen;
   sleep($$config{'refresh_time'});
 }
