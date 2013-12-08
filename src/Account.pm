@@ -1,11 +1,13 @@
 package Account;
 1;
 
+use strict;
+use warnings;
 use Mail::IMAPClient;
 use Time::HiRes;
 
 sub new {
-  $self = {};
+  my $self = {};
 
   my @conn = @_[1..$#_];
   $self->{'conn'} = \@conn;
@@ -14,9 +16,9 @@ sub new {
 }
 
 sub fetch_mail_from_server {
-  $self = shift;
+  my $self = shift;
 
-  $conn = $self->{'conn'};
+  my $conn = $self->{'conn'};
   my $imap = Mail::IMAPClient->new(@$conn) or return 0;
 
   $imap->select('Inbox')
@@ -30,7 +32,7 @@ sub fetch_mail_from_server {
 }
 
 sub fetch {
-  $self = shift;
+  my $self = shift;
   my $result = $self->fetch_mail_from_server;
   $self->{'last_updated'} = time();
   return $result;
@@ -39,10 +41,10 @@ sub fetch {
 # Return true if the current mail information is outdated, i.e. more than 60
 # seconds old.
 sub outdated {
-  $self = shift;
+  my $self = shift;
 
   if (defined $self->{'last_updated'}) {
-    $time_elapsed = time() - $self->{'last_updated'};
+    my $time_elapsed = time() - $self->{'last_updated'};
     if ($time_elapsed >= 60) {
       return 1;
     } else {
@@ -55,7 +57,7 @@ sub outdated {
 
 # Return true if this account has new mail
 sub has_new_mail {
-  $self = shift;
+  my $self = shift;
 
   if ($self->outdated) {
     $self->fetch;
@@ -75,9 +77,9 @@ sub has_new_mail {
 
 # Return all the message ids
 sub get_message_ids {
-  $self = shift;
+  my $self = shift;
 
-  @keys = keys($self->{'mail'});
+  my @keys = keys($self->{'mail'});
   return \@keys;
 }
 
@@ -86,7 +88,7 @@ sub get_new_mail {
   my $self = shift;
   my %result = ();
 
-  while(($k, $v) = each(%{$self->{'mail'}})) {
+  while((my $k, my $v) = each(%{$self->{'mail'}})) {
     if ($self->is_new($v)) {
       $result{$k} = $v;
     }
@@ -117,8 +119,8 @@ sub has_unseen {
     # Compare new messages hash to seen hash. If they are different return
     # true
 
-    @new_keys = keys(%{$self->get_new_mail});
-    @seen_keys = keys(%{$self->{'seen'}});
+    my @new_keys = keys(%{$self->get_new_mail});
+    my @seen_keys = keys(%{$self->{'seen'}});
 
     # I understand that smartsearch is experimental, and I don't wish to be
     # reminded...
