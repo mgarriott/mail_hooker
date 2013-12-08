@@ -1,8 +1,21 @@
 ---
-# After modifying this file rename it to config.yml
+# This is a sample configuration file.
+# You can make changes to the values below and rename the file to config.yml
+#
+# If the script is run without arguments, it will automatically search for a
+# configuration file named config.yml in the project root directory.
 
+# Your imap account username
 user: user@gmail.com
+
+# Your imap account password
 password: password
+
+# The address of your imap server
 server_address: imap.gmail.com
-refresh_time: 60
+
+# How often the script should check for new mail (in seconds)
+refresh_time: 180
+
+# The command to run when a new message is recieved
 command: aplay ~/my/sound.wav 2&> /dev/null
