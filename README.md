@@ -37,7 +37,7 @@ can run the script with:
 
 If STDIN is provided, MailHooker will assume this is your configuration. Thus,
 if you'd like to create your configuration file in a non-standard location you
-can do so with the following:
+can do so and then run MailHooker with the following:
 
     perl /path/to/mail_hooker/src/mail_hooker.pl < /path/to/my/config.yml
 
@@ -51,7 +51,7 @@ another program.
 For example, if you only want MailHooker to run when you are using mutt,
 you could create the following wrapper script:
 
-    #!/usr/bash
+    #!/bin/bash
 
     # Enable job control so that we can use 'fg'
     set -m
@@ -64,17 +64,17 @@ you could create the following wrapper script:
 
     fg 1 # Bring mutt to the foreground (our first job)
 
-When you run this script, mutt will open with MailHooker in the background.
-When mutt is closed, MailHooker will stop automatically.
+When you run this script, mutt will open with MailHooker running in the
+background. When mutt is closed, MailHooker will stop automatically.
 
 ### Encrypting Your Config File with GPG ###
 
 If you are a real security stickler, you can encrypt your config file with
-GPG, and run the decrypter when calling MailHooker.
+GPG, and decrypt the data before passing it to MailHooker.
 
     gpg --batch -d config.yml.gpg | perl src/mail_hooker.pl
 
-GPG will prompt you for your password, and then pass the decrypted file
+GPG will prompt you for your password, and then pass the decrypted config data
 straight into MailHooker.
 
 ## Contributing ##
