@@ -7,7 +7,11 @@ command to execute when new email is received.
 
 - Perl v5.18 or greater *May be work with older versions, but no promises*
 - [Mail::IMAPClient](http://search.cpan.org/~plobbes/Mail-IMAPClient-3.35/)
+- [IO::Socket::SSL](http://search.cpan.org/~sullr/IO-Socket-SSL-1.962/) *For
+  SSL / TLS*
 - [Perl YAML](http://search.cpan.org/dist/YAML/)
+
+*If you are running Arch Linux, the AUR has packages for these*
 
 ## Configuration ##
 
