@@ -65,7 +65,7 @@ sub has_new_mail {
 
   my $result = 0;
 
-  foreach(values($self->{'mail'})) {
+  foreach(values(%{ $self->{'mail'} })) {
     if ($self->is_new($_)) {
       $result = 1;
       last;
@@ -79,7 +79,7 @@ sub has_new_mail {
 sub get_message_ids {
   my $self = shift;
 
-  my @keys = keys($self->{'mail'});
+  my @keys = keys(%{ $self->{'mail'} });
   return \@keys;
 }
 

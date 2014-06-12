@@ -79,7 +79,7 @@ $fake_mail{'7003'} = {
                   };
 
 my $new_mail = $acct->get_new_mail;
-is(keys($new_mail), 2, 'There are two new messages returned by get_new_mail()');
+is(keys(%$new_mail), 2, 'There are two new messages returned by get_new_mail()');
 is_deeply($new_mail, {
                 '7002' => {
                       'INTERNALDATE' => '27-Feb-2013 02:25:56 +0000',
